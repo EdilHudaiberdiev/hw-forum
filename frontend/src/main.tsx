@@ -1,6 +1,5 @@
 import ReactDOM from 'react-dom/client';
 import './index.css';
-<<<<<<< HEAD
 import {persistStore} from 'redux-persist';
 import App from './App';
 import {store} from "./app/store";
@@ -18,14 +17,4 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
       </BrowserRouter>
     </PersistGate>
   </Provider>
-=======
-import App from './App';
-import 'bootstrap/dist/css/bootstrap.css';
-import {BrowserRouter} from 'react-router-dom';
-
-ReactDOM.createRoot(document.getElementById('root')!).render(
-      <BrowserRouter>
-        <App />
-      </BrowserRouter>
->>>>>>> origin/main
 );
