@@ -1,14 +1,15 @@
 import {Router} from 'express';
-import mongoose from "mongoose";
+import mongoose, {mongo} from "mongoose";
 import auth, { RequestWithUser } from '../middleware/auth';
 import Post from "../models/Post";
+import {imagesUpload} from "../multer";
 
 const postRouter = Router();
 
-postRouter.post('/', auth, async (req: RequestWithUser, res, next) => {
+postRouter.post('/', auth, imagesUpload.single('image'), async (req: RequestWithUser, res, next) => {
 
     try {
-        const post = new Post({
+        const postData = new Post({
             user: req.user?.user,
             title: req.body.title,
             description: req.body.description,
@@ -16,14 +17,43 @@ postRouter.post('/', auth, async (req: RequestWithUser, res, next) => {
             image: req.file ? req.file.filename : null,
         });
 
+        const post = new Post(postData);
         await post.save();
-        return res.send(post);
 
-    } catch (error) {
-        if (error instanceof mongoose.Error.ValidationError) {
-            return res.status(422).send(error);
+        res.send(post);
+
+    } catch (e) {
+        if (e instanceof mongoose.Error.ValidationError) {
+            return res.status(422).send(e);
         }
-        next(error);
+
+        if (e instanceof mongo.MongoServerError && e.code === 11000) {
+            return res.status(422).send({message: 'Title is not unique'});
+        }
+
+        next(e);
+    }
+});
+
+postRouter.get('/', async (req, res, next) => {
+    try {
+        const post = await Post.find();
+        return res.send(post);
+    } catch (e) {
+        next(e);
+    }
+});
+
+postRouter.get('/:id', async (req, res, next) => {
+    try {
+        if (!req.params.id) {
+            res.status(400).send({"error": "Id params must be in url"});
+        }
+
+        const post = await Post.findById(req.params.id);
+        return res.send(post);
+    } catch (e) {
+        next(e);
     }
 });
 
