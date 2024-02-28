@@ -37,7 +37,7 @@ postRouter.post('/', auth, imagesUpload.single('image'), async (req: RequestWith
 
 postRouter.get('/', async (req, res, next) => {
     try {
-        const post = await Post.find();
+        const post = await Post.find().sort({datetime: -1});
         return res.send(post);
     } catch (e) {
         next(e);
