@@ -1,4 +1,13 @@
 
+export interface IPosts {
+  _id: string;
+  title: string;
+  description: string;
+  datetime: string,
+  image: string;
+  user?: string,
+}
+
 export interface RegisterMutation {
   username: string;
   password: string;

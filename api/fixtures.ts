@@ -29,6 +29,7 @@ const run = async () => {
     await User.create({
         user: 'user1',
         password: '123',
+        token: '1'
     });
 
     const [post1, post2] = await Post.create(
