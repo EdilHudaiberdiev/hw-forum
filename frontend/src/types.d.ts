@@ -4,9 +4,16 @@ export interface IPosts {
   title: string;
   description: string;
   datetime: string,
-  image: string;
+  image?: string | null;
   user?: string,
 }
+
+export interface IPostForAdd {
+  title: string;
+  description: string;
+  image?: string | null;
+}
+
 
 export interface RegisterMutation {
   username: string;

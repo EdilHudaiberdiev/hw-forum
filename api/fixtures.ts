@@ -27,10 +27,15 @@ const run = async () => {
     }
 
     await User.create({
-        user: 'user1',
-        password: '123',
-        token: '1'
-    });
+            user: 'user1',
+            password: '123',
+            token: '1'
+        },
+        {
+            user: 'user2',
+            password: '123',
+            token: '2'
+        });
 
     const [post1, post2] = await Post.create(
         {
@@ -43,10 +48,11 @@ const run = async () => {
         {
             title: "Post2",
             image: 'fixtures/test-image.jpg',
-            user: "user1",
+            user: "user2",
             description: "description",
             datetime: new Date().toISOString(),
         },
+
     );
 
     await Comments.create(
@@ -56,17 +62,17 @@ const run = async () => {
             text: "text1",
         }, {
             user: "user1",
-            post: post1._id,
+            post: post2._id,
             text: "text2",
         },
         {
-            user: "user1",
-            post: post2._id,
-            text: "text1",
+            user: "user2",
+            post: post1._id,
+            text: "text3",
         }, {
-            user: "user1",
+            user: "user2",
             post: post2._id,
-            text: "text2",
+            text: "text4",
         },
     );
 

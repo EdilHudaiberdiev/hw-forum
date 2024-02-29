@@ -1,6 +1,6 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {IPosts} from '../../types';
-import {getPosts, getPostsById} from './PostsThunk';
+import {addPost, getPosts, getPostsById} from './PostsThunk';
 
 
 interface artistsState {
@@ -47,6 +47,18 @@ const PostsSlice = createSlice({
     });
     builder.addCase(getPostsById.rejected, (state) => {
       state.addLoading = false;
+      state.isError = true;
+    });
+
+    builder.addCase(addPost.pending, (state) => {
+      state.isLoading = true;
+      state.isError = false;
+    });
+    builder.addCase(addPost.fulfilled, (state) => {
+      state.isLoading = false;
+    });
+    builder.addCase(addPost.rejected, (state) => {
+      state.isLoading = false;
       state.isError = true;
     });
   }

@@ -16,5 +16,11 @@ export const getPostsById = createAsyncThunk(
     return response.data ?? null;
   });
 
+export const addPost = createAsyncThunk(
+  'posts/add',
+  async (posts: FormData) => {
+    await axiosApi.post(`posts`, posts);
+  });
+
 
 
