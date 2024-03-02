@@ -1,8 +1,8 @@
 import {Router} from 'express';
 import auth, {RequestWithUser} from "../middleware/auth";
-import Post from "../models/Post";
 import mongoose, {Types} from "mongoose";
 import Comments from "../models/Comments";
+import Post from '../models/Post';
 
 const commentsRouter = Router();
 
@@ -14,21 +14,21 @@ commentsRouter.post('/', auth,  async (req: RequestWithUser, res, next) => {
 
     const postID = await Post.findById(req.query.post_id);
 
-    if (postID === null) {
+    if (!postID) {
         return res.status(404).send({error: "Post not found"});
     }
 
     try {
-        const commentsData = new Comments({
-            user: req.user?.user,
-            post: postID._id,
+        const commentsData = {
+            user: req.user?._id,
+            post: req.query.post_id,
             text: req.body.text,
-        });
+        };
 
-        const comments = new Comments(commentsData);
-        await comments.save();
+        const comment = new Comments(commentsData);
 
-        res.send(comments);
+        await comment.save();
+        res.send(comment);
 
     } catch (e) {
         if (e instanceof mongoose.Error.ValidationError) {
@@ -38,20 +38,20 @@ commentsRouter.post('/', auth,  async (req: RequestWithUser, res, next) => {
     }
 });
 
-commentsRouter.get('/:id', async (req, res, next) => {
+commentsRouter.get('/', async (req, res, next) => {
     try {
-        let _id;
-
-        try {
-            _id = new Types.ObjectId(req.params.id);
-        } catch {
-            return res.status(404).send({error: 'Wrong ObjectId!'});
+        if (!req.query.post_id) {
+            res.status(404).send({"error": "Post_id must be present by query"});
         }
 
-        const comments = await Comments.find({ post: _id }).populate('post');
-        console.log(comments)
+        const post = await Post.findById(req.query.post_id);
 
-        res.send(comments);
+        if (!post) {
+            return res.status(404).send({error: "Post not found"});
+        }
+
+        const comments = await Comments.find({ post: req.query.post_id }).populate('user', 'user');
+        res.send(comments.reverse());
     } catch (e) {
         next(e);
     }

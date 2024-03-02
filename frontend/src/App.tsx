@@ -3,6 +3,7 @@ import './App.css';
 import {useAppSelector} from './app/hooks';
 import Toolbar from './Components/UI/Toolbar/Toolbar';
 import AddNewPost from './Containers/AddNewPost/AddNewPost';
+import FullPost from './Containers/FullPost/FullPost';
 import Home from './Containers/Home/Home';
 import Login from './Features/users/Login/Login';
 import Register from './Features/users/Register/Register';
@@ -19,6 +20,7 @@ const App = () => {
       <main className="mt-5">
         <Routes>
           <Route path="/" element={<Home/>}/>
+          <Route path="/posts/:id" element={<FullPost/>}/>
           <Route path="/register" element={<Register/>}/>
           <Route path="/login" element={<Login/>}/>
           <Route path="/new-post" element={user ? <AddNewPost/> : <Navigate to='/login' />}/>

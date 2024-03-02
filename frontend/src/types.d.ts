@@ -51,3 +51,11 @@ export interface LoginMutation {
 export interface GlobalError {
   error: string;
 }
+
+
+export interface IComments {
+  _id: string;
+  post: IPosts;
+  user: User;
+  text: string;
+}

@@ -59,20 +59,20 @@ const run = async () => {
         {
             user: user1._id,
             post: post1._id,
-            text: "comment1",
+            text: "text1",
         }, {
             user: user1._id,
             post: post2._id,
-            text: "comment2",
+            text: "text2",
         },
         {
             user: user2._id,
             post: post1._id,
-            text: "comment3",
+            text: "text3",
         }, {
             user: user2._id,
             post: post2._id,
-            text: "comment4",
+            text: "text4",
         },
     );
 
