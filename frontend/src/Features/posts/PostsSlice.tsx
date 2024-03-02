@@ -5,7 +5,7 @@ import {addPost, getPosts, getPostsById} from './PostsThunk';
 
 interface artistsState {
   posts: IPosts[];
-  post: IPosts[] | null;
+  post: IPosts | null;
   isLoading: boolean;
   addLoading: boolean;
   isError: boolean;
@@ -38,15 +38,16 @@ const PostsSlice = createSlice({
     });
 
     builder.addCase(getPostsById.pending, (state) => {
-      state.addLoading = true;
+      state.isLoading = true;
       state.isError = false;
     });
     builder.addCase(getPostsById.fulfilled, (state, action) => {
-      state.addLoading = false;
-      state.posts = action.payload;
+      state.isLoading = false;
+      state.posts = [];
+      state.post = action.payload;
     });
     builder.addCase(getPostsById.rejected, (state) => {
-      state.addLoading = false;
+      state.isLoading = false;
       state.isError = true;
     });
 

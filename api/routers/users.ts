@@ -47,7 +47,7 @@ userRouter.post('/sessions', async (req, res, next) => {
     }
 });
 
-userRouter.delete('/sessions', async (req, res, next) => {
+userRouter.delete('/sessions', auth ,async (req, res, next) => {
 
     try {
         const token = req.get('Authorization');
@@ -59,7 +59,7 @@ userRouter.delete('/sessions', async (req, res, next) => {
 
         if (!user) return res.send(success);
 
-        user.token = '';
+        user.generateToken();
         user.save();
         return res.send(success);
     } catch (e) {

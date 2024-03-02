@@ -1,12 +1,18 @@
 import {Box, Button, Menu, MenuItem} from '@mui/material';
-import React, { useState } from 'react';
-import { User } from '../../../types';
+import React, {useState} from 'react';
+import {useAppDispatch, useAppSelector} from '../../../app/hooks';
+import {selectLogoutError, selectLogoutLoading, unsetUser} from '../../../Features/users/UsersSlice';
+import {logout} from '../../../Features/users/UsersThunk';
+import {User} from '../../../types';
 
 interface Props {
   user: User;
 }
 
 const UserMenu: React.FC<Props> = ({user}) => {
+  const logoutError = useAppSelector(selectLogoutError);
+  const logoutLoading = useAppSelector(selectLogoutLoading);
+  const dispatch = useAppDispatch();
   const [anchorEl, setAnchorEl] = useState<HTMLElement | null>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -17,6 +23,13 @@ const UserMenu: React.FC<Props> = ({user}) => {
     setAnchorEl(null);
   };
 
+  const handleLogout = async () => {
+    await dispatch(logout()).unwrap();
+    if (logoutError === null && !logoutLoading) {
+      dispatch(unsetUser());
+    }
+  };
+
 
   return (
     <>
@@ -25,7 +38,7 @@ const UserMenu: React.FC<Props> = ({user}) => {
           onClick={handleClick}
           className="text-white"
         >
-          Hello, {user.username}
+          Hello, {user.user}
         </Button>
 
         <Menu
@@ -34,7 +47,7 @@ const UserMenu: React.FC<Props> = ({user}) => {
           open={Boolean(anchorEl)}
           onClose={handleClose}
         >
-          <MenuItem>Log out</MenuItem>
+          <MenuItem><Button onClick={handleLogout}>Log out</Button></MenuItem>
         </Menu>
       </Box>
     </>

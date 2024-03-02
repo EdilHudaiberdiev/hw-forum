@@ -20,13 +20,13 @@ const run = async () => {
     await mongoose.connect(config.mongoose.db);
     const db = mongoose.connection;
 
-    const collections = ['posts', 'comments', 'users'];
+    const collections = ['users' , 'posts', 'comments'];
 
     for (const collectionName of collections) {
         await dropCollection(db, collectionName);
     }
 
-    await User.create({
+    const [user1, user2] = await User.create({
             user: 'user1',
             password: '123',
             token: '1'
@@ -41,14 +41,14 @@ const run = async () => {
         {
             title: "Post1",
             image: 'fixtures/test-image.jpg',
-            user: "user1",
+            user: user1._id,
             description: "description",
             datetime: new Date().toISOString(),
         },
         {
             title: "Post2",
             image: 'fixtures/test-image.jpg',
-            user: "user2",
+            user: user2._id,
             description: "description",
             datetime: new Date().toISOString(),
         },
@@ -57,22 +57,22 @@ const run = async () => {
 
     await Comments.create(
         {
-            user: "user1",
+            user: user1._id,
             post: post1._id,
-            text: "text1",
+            text: "comment1",
         }, {
-            user: "user1",
+            user: user1._id,
             post: post2._id,
-            text: "text2",
+            text: "comment2",
         },
         {
-            user: "user2",
+            user: user2._id,
             post: post1._id,
-            text: "text3",
+            text: "comment3",
         }, {
-            user: "user2",
+            user: user2._id,
             post: post2._id,
-            text: "text4",
+            text: "comment4",
         },
     );
 

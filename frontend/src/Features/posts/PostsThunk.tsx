@@ -1,4 +1,5 @@
 import {createAsyncThunk} from "@reduxjs/toolkit";
+import {RootState} from '../../app/store';
 import axiosApi from '../../axiosApi';
 
 
@@ -18,8 +19,11 @@ export const getPostsById = createAsyncThunk(
 
 export const addPost = createAsyncThunk(
   'posts/add',
-  async (posts: FormData) => {
-    await axiosApi.post(`posts`, posts);
+  async (posts: FormData, thunkAPI) => {
+    let state = thunkAPI.getState() as RootState;
+    if (state?.users?.user?.token) {
+      await axiosApi.post(`posts`, posts, {headers: {'Authorization': state.users.user.token}});
+    }
   });
 
 

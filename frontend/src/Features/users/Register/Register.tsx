@@ -12,7 +12,7 @@ const Register = () => {
   const error = useAppSelector(selectRegisterError);
   const navigate = useNavigate();
   const [state, setState] = useState<RegisterMutation>({
-    username: '',
+    user: '',
     password: ''
   });
 
@@ -68,13 +68,13 @@ const Register = () => {
             <Grid item xs={12}>
               <TextField
                 required
-                label="Username"
-                name="username"
-                value={state.username}
-                error={Boolean(getFieldError('username'))}
-                helperText={getFieldError('username')}
+                label="User"
+                name="user"
+                value={state.user}
+                error={Boolean(getFieldError('user'))}
+                helperText={getFieldError('user')}
                 onChange={inputChangeHandler}
-                autoComplete="new-username"
+                autoComplete="new-user"
               />
             </Grid>
 

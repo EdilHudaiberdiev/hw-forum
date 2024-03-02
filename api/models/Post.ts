@@ -1,4 +1,5 @@
-import mongoose from 'mongoose';
+import mongoose, {Schema, Types} from 'mongoose';
+import User from './User';
 
 const PostSchema = new mongoose.Schema({
     title: {
@@ -6,7 +7,16 @@ const PostSchema = new mongoose.Schema({
         required: true,
     },
     user: {
-        type: String,
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        required: true,
+        validate: {
+            validator: async (value: Types.ObjectId) => {
+                const user = await User.findById(value);
+                return Boolean(user);
+            },
+            message: 'User does not exist!',
+        },
     },
     description: {
         type: String,

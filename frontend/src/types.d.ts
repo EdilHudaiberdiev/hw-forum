@@ -1,11 +1,16 @@
+export interface User {
+  _id: string;
+  user: string;
+  token: string;
+}
 
 export interface IPosts {
   _id: string;
   title: string;
   description: string;
   datetime: string,
-  image?: string | null;
-  user?: string,
+  image: string | null;
+  user: User,
 }
 
 export interface IPostForAdd {
@@ -16,15 +21,10 @@ export interface IPostForAdd {
 
 
 export interface RegisterMutation {
-  username: string;
+  user: string;
   password: string;
 }
 
-export interface User {
-  _id: string;
-  username: string;
-  token: string;
-}
 
 export interface RegisterResponse {
   user: User;
@@ -44,7 +44,7 @@ export interface ValidationError {
 }
 
 export interface LoginMutation {
-  username: string;
+  user: string;
   password: string;
 }
 

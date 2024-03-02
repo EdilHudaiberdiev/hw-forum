@@ -6,7 +6,6 @@ import Spinner from '../../Components/UI/Spinner/Spinner';
 import PostCard from '../../Components/PostCard/PostCard';
 
 const Post = () => {
-
   const dispatch: AppDispatch = useDispatch();
   const posts = useSelector((state: RootState) => state.posts.posts);
   const loading = useSelector((state: RootState) => state.posts.isLoading);

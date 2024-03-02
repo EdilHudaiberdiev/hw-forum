@@ -10,7 +10,7 @@ postRouter.post('/', auth, imagesUpload.single('image'), async (req: RequestWith
 
     try {
         const postData = new Post({
-            user: req.user?.user,
+            user: req.user?._id,
             title: req.body.title,
             description: req.body.description,
             datetime: new Date().toISOString(),
@@ -37,7 +37,7 @@ postRouter.post('/', auth, imagesUpload.single('image'), async (req: RequestWith
 
 postRouter.get('/', async (req, res, next) => {
     try {
-        const post = await Post.find().sort({datetime: -1}).populate('user');
+        const post = await Post.find().populate('user', 'user').sort({datetime: -1});
         return res.send(post);
     } catch (e) {
         next(e);
@@ -50,7 +50,7 @@ postRouter.get('/:id', async (req, res, next) => {
             res.status(400).send({"error": "Id params must be in url"});
         }
 
-        const post = await Post.findById(req.params.id);
+        const post = await Post.findById(req.params.id).populate('user', 'user');
         return res.send(post);
     } catch (e) {
         next(e);

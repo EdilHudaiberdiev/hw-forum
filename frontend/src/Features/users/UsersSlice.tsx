@@ -1,7 +1,7 @@
 import {createSlice} from '@reduxjs/toolkit';
 import {RootState} from '../../app/store';
 import {GlobalError, User, ValidationError} from '../../types';
-import {login, register} from './UsersThunk';
+import {login, logout, register} from './UsersThunk';
 
 interface UsersState {
   user: User | null,
@@ -9,6 +9,8 @@ interface UsersState {
   registerError: ValidationError | null,
   loginLoading: boolean;
   loginError: GlobalError | null;
+  logoutLoading: boolean;
+  logoutError: GlobalError | null;
 }
 
 const initialState: UsersState = {
@@ -17,6 +19,8 @@ const initialState: UsersState = {
   registerError: null,
   loginLoading: false,
   loginError: null,
+  logoutLoading: false,
+  logoutError: null,
 }
 
 
@@ -27,12 +31,19 @@ export const selectRegisterError = (state: RootState) => state.users.registerErr
 export const selectLoginLoading = (state: RootState) => state.users.loginLoading;
 export const selectLoginError = (state: RootState) => state.users.loginError;
 
+export const selectLogoutLoading = (state: RootState) => state.users?.logoutLoading;
+export const selectLogoutError = (state: RootState) => state.users?.logoutError;
+
 
 
 export const usersSlice = createSlice({
   name: 'users',
   initialState,
-  reducers: {},
+  reducers: {
+    unsetUser: (state) => {
+      state.user = null;
+    }
+  },
   extraReducers: (builder) => {
 
     builder.addCase(register.pending, (state) => {
@@ -64,9 +75,25 @@ export const usersSlice = createSlice({
       state.loginLoading = false;
       state.loginError = error || null;
     });
+
+    builder.addCase(logout.pending, (state) => {
+      state.logoutLoading = true;
+      state.logoutError = null;
+    });
+
+    builder.addCase(logout.fulfilled, (state) => {
+      state.logoutLoading = false;
+      state.user = null;
+    });
+
+    builder.addCase(logout.rejected, (state, {payload: error}) => {
+      state.logoutLoading = false;
+      state.logoutError = error || null;
+    });
   },
 });
 
 
 
 export const usersReducer = usersSlice.reducer;
+export const {unsetUser} = usersSlice.actions;

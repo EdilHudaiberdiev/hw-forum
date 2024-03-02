@@ -8,7 +8,7 @@ const Home = () => {
   const Navigation = useNavigate();
 
   return (
-    <div>
+    <div className="container">
       <div className="text-end">
         <Button variant="outlined" onClick={() => Navigation('/new-post')}>Add new post</Button>
       </div>
